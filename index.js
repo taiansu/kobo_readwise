@@ -5,11 +5,9 @@ import database from './database.js';
 
 import { createRequire } from 'module'; // Bring in the ability to create the 'require' method
 const require = createRequire(import.meta.url); // construct the require method
-const config = require('./config.json'); // use the require method
+const { accessToken } = require('./config.json'); // use the require method
 
 function main() {
-  console.log('cfg', config);
-
   getBookmarks(database)
     .then(processAndSend)
     .finally(() => { database.destroy() });
@@ -49,7 +47,7 @@ async function postToReadwise(data) {
       url: '/highlights',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Token ${config.accessToken}`
+        'Authorization': `Token ${accessToken}`
       },
       data: JSON.stringify(data)
     })
