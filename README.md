@@ -26,7 +26,6 @@ Only test with KOBO forma and KOBO elipsa, on macOS for now.
 
 1. Windows support
 2. Get source_url and cover_url from some book API
-3. Find a way to get more accurate bookmark create time. It use `SyncTime` on bookmark currently.
 
 ## License
 

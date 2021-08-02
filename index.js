@@ -28,9 +28,9 @@ function processAndSend(bookmarks) {
          )(bookmarks);
 }
 
-function toReadwiseHighlight({Text: text, Title: title, Attribution: attributions, SyncTime: dateCreated, StartContainerPath: startPath, ISBN: isbn}) {
+function toReadwiseHighlight({Text: text, Title: title, Attribution: attributions, DateCreated: dateCreated, StartContainerPath: startPath, ISBN: isbn}) {
   return R.mergeRight({
-    text, title, isbn,
+    text, title,
     author: toAuthor(attributions),
     highlighted_at: toHighlightedAt(dateCreated) }, toLocationProp(startPath));
 }
