@@ -1,9 +1,10 @@
 import knex from 'knex';
 import { existsSync } from 'fs';
+import { execSync } from 'child_process';
 
-const db_path = process.plateform === 'win32' ? '' : '/Volumes/KOBOeReader/.kobo/KoboReader.sqlite';
+const dbPath = getDBPath(process.platform);
 
-if (!existsSync(db_path)) {
+if (!existsSync(dbPath)) {
   console.log("Cannot find KOBOeReader's data. Please make sure you connect the device properly.\n\n")
   process.exit(1);
 }
@@ -11,9 +12,28 @@ if (!existsSync(db_path)) {
 const database = knex({
   client: 'sqlite3',
   connection: {
-    filename: db_path
+    filename: dbPath
   },
   useNullAsDefault: true
 })
+
+function getDBPath(platform) {
+  switch (platform) {
+    case 'win32':
+      let drive = getKOBODrive();
+      return `${drive}/.kobo/KoboReader.sqlite`;
+    default:
+      return '/Volumes/KOBOeReader/.kobo/KoboReader.sqlite'
+  }
+}
+
+function getKOBODrive() {
+  return execSync('wmic logicaldisk get Name, VolumeName')
+           .toString()
+           .split('\r\r\n')
+           .map(row => row.trim().split(/\s+/))
+           .filter(([_drive, desc]) => desc === 'KOBOeReader')
+           .map(([drive]) => drive)[0];
+}
 
 export default database;
