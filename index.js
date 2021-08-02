@@ -1,5 +1,5 @@
 import axios from 'axios';
-import moment from 'moment';
+// import moment from 'moment';
 import R from 'ramda';
 import database from './database.js';
 
@@ -56,7 +56,8 @@ async function postToReadwise(data) {
       console.log('Bookmarks syned to Readwised')
     }
   } catch(err) {
-    throw new Error(err)
+    console.log('error', err)
+    process.exit(1);
   }
 }
 
