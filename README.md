@@ -24,6 +24,7 @@ Only test with KOBO forma and KOBO elipsa, on macOS for now.
 
 ## Roadmap
 
+0. Make it a node package with binary
 1. Windows support
 2. Get source_url and cover_url from some book API
 
