@@ -31,6 +31,7 @@ function processAndSend(bookmarks) {
 function toReadwiseHighlight({Text: text, Title: title, Attribution: attributions, DateCreated: dateCreated, StartContainerPath: startPath, ISBN: isbn}) {
   return R.mergeRight({
     text, title,
+    source_type: 'book',
     author: toAuthor(attributions),
     highlighted_at: toHighlightedAt(dateCreated) }, toLocationProp(startPath));
 }
