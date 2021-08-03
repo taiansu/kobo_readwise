@@ -53,10 +53,10 @@ async function postToReadwise(data) {
     })
 
     if (resp.status === 200) {
-      console.log('Bookmarks syned to Readwised')
+      console.log('=== Successfully send bookmarks fom KOBO eReader to Readwised, enjoy! ===\n\n');
     }
   } catch(err) {
-    console.log('error', err)
+    console.log('Something went wrong: ', err)
     process.exit(1);
   }
 }
