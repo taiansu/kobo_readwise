@@ -1,5 +1,4 @@
 import axios from 'axios';
-// import moment from 'moment';
 import R from 'ramda';
 import database from './database.js';
 
@@ -7,7 +6,7 @@ import { createRequire } from 'module'; // Bring in the ability to create the 'r
 const require = createRequire(import.meta.url); // construct the require method
 const { accessToken } = require('./config.json'); // use the require method
 
-function main() {
+function entry() {
   getBookmarks(database)
     .then(processAndSend)
     .finally(() => { database.destroy() });
@@ -28,12 +27,21 @@ function processAndSend(bookmarks) {
          )(bookmarks);
 }
 
-function toReadwiseHighlight({Text: text, Title: title, Attribution: attributions, DateCreated: dateCreated, StartContainerPath: startPath, ISBN: isbn}) {
-  return R.mergeRight({
+function toReadwiseHighlight({
+  Text: text,
+  Title: title,
+  Attribution: attributions,
+  DateCreated: dateCreated,
+  StartContainerPath: startPath,
+  ISBN
+}) {
+  return R.mergeLeft(toLocationProp(startPath), {
     text, title,
     source_type: 'book',
     author: toAuthor(attributions),
-    highlighted_at: toHighlightedAt(dateCreated) }, toLocationProp(startPath));
+    highlighted_at: toHighlightedAt(dateCreated),
+    ISBN
+  });
 }
 
 function wrapToHighlights(highlights) {
@@ -54,7 +62,7 @@ async function postToReadwise(data) {
     })
 
     if (resp.status === 200) {
-      console.log('=== Successfully send bookmarks fom KOBO eReader to Readwise, enjoy! ===\n\n');
+      console.log('✅ Successfully send bookmarks fom KOBO eReader to Readwise, enjoy!\n\n');
     }
   } catch(err) {
     console.log('Something went wrong: ', err)
@@ -83,4 +91,4 @@ function toHighlightedAt(datetime) {
   return datetime;
 }
 
-main();
+export default entry;

@@ -5,7 +5,7 @@ import { execSync } from 'child_process';
 const dbPath = getDBPath(process.platform);
 
 if (!existsSync(dbPath)) {
-  console.log("Cannot find KOBOeReader's data. Please make sure you connect the device properly.\n\n")
+  console.log("\n❌ Cannot find KOBOeReader's data. Please make sure you connect the device properly.\n\n")
   process.exit(1);
 }
 

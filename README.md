@@ -15,7 +15,7 @@ Send Kobo eReader bookmarks to Readwise.
 
 1. Connect your KOBO eReader with via USB
 2. On your KOBO eReader, once the "Computer detected" screen pop-up, click the `[Connect]` button.
-3. On your computer, run `npm start`.
+3. On your computer, run `./bin/kobo_readwise.js`.
 4. Check your Readwise dashboard, the bookmarks should be imported.
 
 ## Disclaimer
