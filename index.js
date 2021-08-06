@@ -14,11 +14,13 @@ function entry() {
 
 function getBookmarks(db) {
   return db.from('Bookmark')
-           .innerJoin('content', 'Bookmark.VolumeID', 'content.ContentID')
-           .select('*');
+           .innerJoin('content as Ct', 'Bookmark.ContentID', 'Ct.ContentID')
+           .innerJoin('content as Vol', 'Bookmark.VolumeID', 'Vol.ContentID')
+           .select(['Bookmark.Text', 'Bookmark.DateCreated', 'Ct.BookTitle', 'Ct.VolumeIndex', 'Vol.Attribution', 'Vol.ISBN']);
 }
 
 function processAndSend(bookmarks) {
+  console.log('====================\n', bookmarks)
   return R.pipe(
             R.filter(validBookmark),
             R.map(toReadwiseHighlight),
@@ -29,19 +31,21 @@ function processAndSend(bookmarks) {
 
 function toReadwiseHighlight({
   Text: text,
-  Title: title,
+  BookTitle: title,
   Attribution: attributions,
   DateCreated: dateCreated,
-  StartContainerPath: startPath,
+  VolumeIndex: volume,
   ISBN
 }) {
-  return R.mergeLeft(toLocationProp(startPath), {
+  return {
     text, title,
+    location_type: 'order',
+    location: volume,
     source_type: 'book',
     author: toAuthor(attributions),
     highlighted_at: toHighlightedAt(dateCreated),
     ISBN
-  });
+  };
 }
 
 function wrapToHighlights(highlights) {
@@ -67,15 +71,6 @@ async function postToReadwise(data) {
   } catch(err) {
     console.log('Something went wrong: ', err)
     process.exit(1);
-  }
-}
-
-function toLocationProp(path) {
-  const rgx = /span#kobo\\\.(\d+)\\\.\d+/;
-  if (rgx.test(path)) {
-    return { location_type: 'page', location: rgx.exec(path)[1] }
-  } else {
-    return {};
   }
 }
 

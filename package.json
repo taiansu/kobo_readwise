@@ -1,6 +1,6 @@
 {
   "name": "kobo_readwise",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Extract bookmarks from KOBO reader and send to Readwise",
   "scripts": {
     "start": "node index.js"
